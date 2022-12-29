@@ -4,7 +4,7 @@ export const getCourses = async (req, res) => {
     try {
         const curriculum = await Curriculum.findOne({program: req.params.curriculumId})
         const { year, semester } = req.query
-        
+
         if (year) {
             curriculum.courses = curriculum.courses.filter((item) => item.year == year)
         }
@@ -12,9 +12,12 @@ export const getCourses = async (req, res) => {
             curriculum.courses = curriculum.courses.filter((item) => item.semester == semester)
         }
 
-        res.status(200).json(curriculum)
+        if (curriculum.courses.length !== 0)
+            res.status(200).json(curriculum.courses)
+        else
+            res.status(204).send()
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(500).json({ error: err.message })
     }
 }
 
@@ -23,10 +26,12 @@ export const getCourse = async (req, res) => {
         const {curriculumId, id } = req.params
         const curriculum = await Curriculum.findOne({program: curriculumId})
         const course = curriculum.courses.id(id)
-        console.log(course)
-        res.status(200).json(course)
+        if (course)
+            res.status(200).json(course)
+        else
+            res.status(404).json({ error: 'resource not found' })
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(500).json({ error: err.message })
     }
 }
 
@@ -36,7 +41,8 @@ export const addCourse = async (req, res) => {
         const curriculum = await Curriculum.findOne({program: req.params.curriculumId})
         curriculum.courses.push(newCourse)
         await curriculum.save()
-        res.status(201).json(newCourse)
+        const idNewCourse = curriculum.courses[curriculum.courses.length-1]._id
+        res.status(201).json({ id: idNewCourse })
     } catch (err) {
         res.status(500).json({ error: err.message })
     }

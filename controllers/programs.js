@@ -3,9 +3,12 @@ import Program from "../models/Program.js"
 export const getPrograms = async (req, res) => {
     try {
         const programs = await Program.find()
-        res.status(200).json(programs)
+        if (programs.length !== 0)
+            res.status(200).json(programs)
+        else
+            res.status(204).send()
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(500).json({ error: err.message })
     }
 }
 
@@ -13,9 +16,12 @@ export const getProgram = async (req, res) => {
     try {
         const { id } = req.params
         const program = await Program.findById(id)
-        res.status(200).json(program)
+        if (program)
+            res.status(200).json(program)
+        else
+            res.status(404).json({ error: 'resource not found' })
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(500).json({ error: err.message })
     }
 }
 
@@ -29,7 +35,7 @@ export const addProgram = async (req, res) => {
             specialization
         })
         const savedProgram = await newProgram.save()
-        res.status(201).json(savedProgram)
+        res.status(201).json({id: savedProgram._id})
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
