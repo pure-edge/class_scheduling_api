@@ -4,7 +4,7 @@ export const getCourses = async (req, res) => {
     try {
         const curriculum = await Curriculum.findOne({program: req.params.curriculumId})
         const { year, semester } = req.query
-
+        
         if (year) {
             curriculum.courses = curriculum.courses.filter((item) => item.year == year)
         }
