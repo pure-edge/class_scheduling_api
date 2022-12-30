@@ -2,7 +2,7 @@ import Curriculum from "../models/Curriculum.js"
 
 export const getCourses = async (req, res) => {
     try {
-        const curriculum = await Curriculum.findOne({program: req.params.curriculumId})
+        const curriculum = await Curriculum.findById(req.params.curriculumId)
         const { year, semester } = req.query
 
         if (year) {
@@ -24,7 +24,7 @@ export const getCourses = async (req, res) => {
 export const getCourse = async (req, res) => {
     try {
         const {curriculumId, id } = req.params
-        const curriculum = await Curriculum.findOne({program: curriculumId})
+        const curriculum = await Curriculum.findById(curriculumId)
         const course = curriculum.courses.id(id)
         if (course)
             res.status(200).json(course)
@@ -38,7 +38,7 @@ export const getCourse = async (req, res) => {
 export const addCourse = async (req, res) => {
     try {
         const newCourse = req.body
-        const curriculum = await Curriculum.findOne({program: req.params.curriculumId})
+        const curriculum = await Curriculum.findById(req.params.curriculumId)
         curriculum.courses.push(newCourse)
         await curriculum.save()
         const idNewCourse = curriculum.courses[curriculum.courses.length-1]._id
@@ -51,7 +51,7 @@ export const addCourse = async (req, res) => {
 export const deleteCourse = async (req, res) => {
     try {
         const {curriculumId, id } = req.params
-        const curriculum = await Curriculum.findOne({program: curriculumId})
+        const curriculum = await Curriculum.findById(curriculumId)
         curriculum.courses.id(id).remove();
         await curriculum.save()
         res.status(204).send()
@@ -64,7 +64,7 @@ export const deleteCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const {curriculumId, id } = req.params
-        const curriculum = await Curriculum.findOne({program: curriculumId})
+        const curriculum = await Curriculum.findById(curriculumId)
 
         const {code, description, semester, year, lectureHours, labHours } = req.body
         curriculum.courses.id(id).code = code

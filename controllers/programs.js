@@ -35,7 +35,7 @@ export const addProgram = async (req, res) => {
             specialization
         })
         const savedProgram = await newProgram.save()
-        res.status(201).json({id: savedProgram._id})
+        res.status(201).json({ id: savedProgram._id })
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
