@@ -7,7 +7,6 @@ import userRoutes from './routes/users.js'
 import programRoutes from './routes/programs.js'
 import curriculumRoutes from './routes/curriculums.js'
 import courseRoutes from './routes/courses.js'
-import { register } from './controllers/auth.js'
 
 dotenv.config()
 const app = express()
@@ -16,7 +15,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 /* routes */
-app.post('/auth/register', register)
 app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
 app.use('/programs', programRoutes)
