@@ -54,11 +54,12 @@ export const deleteProgram = async (req, res) => {
 export const updateProgram = async (req, res) => {
     try {
         const filter = { _id: req.params.id }
-        const { code, fullName, years } = req.body
+        const { code, fullName, years, specialization } = req.body
         const update = { 
             code: code, 
             fullName: fullName, 
-            years: years 
+            years: years,
+            specialization: specialization 
         }
 
         await Program.findOneAndUpdate(filter, update)
